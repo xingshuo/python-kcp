@@ -73,7 +73,7 @@ def test(mode):
             ilen,pkg = g_oLsm.recv(p1)
             if ilen < 0:
                 break
-            #如果 p1收到udp，则作为下层协议输入到kcp1
+            #如果 p1收到udp，则作为下层协议输入到okcp1
             okcp1.input(pkg)
 
         #okcp2接收到任何包都返回回去
@@ -83,7 +83,7 @@ def test(mode):
                 break
             okcp2.send(pkg)
 
-        #kcp1收到kcp2的回射数据
+        #okcp1收到okcp2的回射数据
         while True:
             ilen,pkg = okcp1.recv() 
             if ilen <= 0:
