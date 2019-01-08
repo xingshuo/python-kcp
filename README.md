@@ -25,7 +25,7 @@ Wiki
 
 安装库
 -----
-    sh setup.sh
+    sudo sh setup.sh
 
 运行测试程序
 -----

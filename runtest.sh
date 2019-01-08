@@ -1,1 +1,1 @@
-cd test && ../bin/python testkcp.py
+cd test && python testkcp.py
