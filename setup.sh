@@ -1,4 +1,10 @@
+PYTHON=python
+if [ $# -ge 1 ]; then
+	PYTHON=$1
+fi
 sudo pip install -r requirements.txt
-python setup.py build
-python setup.py install
+$PYTHON setup.py build
+$PYTHON setup.py install
 rm -rf build dist lkcp.egg-info
+PY_VERSION=`$PYTHON -V 2>&1|awk '{print $2}'|awk -F '.' '{print $1"."$2"."$3}'`
+echo 'install python version:' $PY_VERSION

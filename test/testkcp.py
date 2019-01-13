@@ -3,8 +3,11 @@ import lkcp
 from lkcp import KcpObj
 from utils import *
 from latencysm import LatencySimulator
+import sys
 
 g_oLsm = None
+
+_input = input if sys.version_info.major == 3 else raw_input
 
 def kcp_callback(id, buf):
     global g_oLsm
@@ -92,25 +95,25 @@ def test(mode):
             ts = netbytes2uint32(pkg[4:8])
             rtt = current - ts
             if sn != inext:
-                print "ERROR sn count %d %d!=%d\n"%(count, sn, inext)
+                print("ERROR sn count %d %d!=%d\n"%(count, sn, inext))
                 return
             inext += 1
             sumrtt += rtt
             count += 1
             if rtt > maxrtt:
                 maxrtt = rtt
-            print "[RECV] mode=%d sn=%d rtt=%d\n"%(mode, sn, rtt)
+            print("[RECV] mode=%d sn=%d rtt=%d\n"%(mode, sn, rtt))
 
         if inext > 20:
             break
 
     cost = getms() - start_ts
-    print "mode %d total %dms avgrtt=%d maxrtt=%d\n"%(mode, cost, sumrtt/count, maxrtt)
+    print("mode %d total %dms avgrtt=%d maxrtt=%d\n"%(mode, cost, sumrtt/count, maxrtt))
     del okcp1
     del okcp2
 
 test(0) #默认模式，类似 TCP：正常模式，无快速重传，常规流控
-raw_input("press enter to next")
+_input("press enter to next")
 test(1) #普通模式，关闭流控等
-raw_input("press enter to next")
+_input("press enter to next")
 test(2) #快速模式，所有开关都打开，且关闭流控

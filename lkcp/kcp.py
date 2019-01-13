@@ -1,4 +1,5 @@
 from . import core
+import sys
 
 __all__ = ["KcpObj"]
 
@@ -19,6 +20,8 @@ class KcpObj:
         core.lkcp_update(self.cobj, current)
 
     def send(self, data):
+        if sys.version_info.major == 3 and isinstance(data, str):
+            data = data.encode("UTF-8")
         return core.lkcp_send(self.cobj, data)
 
     def input(self, data):

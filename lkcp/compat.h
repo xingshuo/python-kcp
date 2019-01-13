@@ -3,16 +3,14 @@
 typedef void (*capsule_dest)(PyObject *);
 typedef void (*cobj_dest)(void *);
 
-#if PY_MAJOR_VERSION != 2
-    #error "need python 2.*"
-#elif PY_MINOR_VERSION > 6
-    #define CAP_NEW PyCapsule_New
-    #define DEST_FUNC_TYPE capsule_dest
-    #define CAP_GET_POINTER PyCapsule_GetPointer
+#if PY_MAJOR_VERSION == 2 && PY_MINOR_VERSION <= 6
+	#define CAP_NEW(a,b,c) PyCObject_FromVoidPtr(a,c)
+	#define DEST_FUNC_TYPE cobj_dest
+	#define CAP_GET_POINTER(a,b) PyCObject_AsVoidPtr(a)
 #else
-    #define CAP_NEW(a,b,c) PyCObject_FromVoidPtr(a,c)
-    #define DEST_FUNC_TYPE cobj_dest
-    #define CAP_GET_POINTER(a,b) PyCObject_AsVoidPtr(a)
+	#define CAP_NEW PyCapsule_New
+	#define DEST_FUNC_TYPE capsule_dest
+	#define CAP_GET_POINTER PyCapsule_GetPointer
 #endif
 
 PyObject* make_capsule(void *p, const char *name, capsule_dest dest) {
